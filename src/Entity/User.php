@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,35 +10,71 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ApiResource]
+/**
+ * @ApiResource(
+ *     normalizationContext={"groups"={"users_read"}}
+ *     )
+ */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    /**
+     * @Groups({"users_read"})
+     */
     private $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
+    /**
+     * @Assert\NotBlank(message="L'adresse email est obligatoire")
+     * @Groups({"users_read"})
+     */
     private $email;
 
     #[ORM\Column(type: 'json')]
+    /**
+     * @Groups({"users_read"})
+     */
     private $roles = [];
 
     #[ORM\Column(type: 'string')]
+    /**
+     * @Assert\NotBlank(message=" Il vous faut un mots de passe obligatoire")
+     */
     private $password;
 
     #[ORM\Column(type: 'string', length: 255)]
+    /**
+     * @Assert\NotBlank(message="Le nom de famille est obligatoire")
+     * @Groups({"users_read"})
+     */
     private $firstName;
 
     #[ORM\Column(type: 'string', length: 255)]
+    /**
+     * @Assert\NotBlank(message=" Le prénom est obligatoire")
+     * @Groups({"users_read"})
+     */
     private $lastName;
 
     #[ORM\Column(type: 'string', length: 255)]
+    /**
+     * @Assert\NotBlank(message="La description de la journée est obligatoire")
+     * @Assert\Length(min= 9, minMessage="Le numéro de téléphone doit faire entre 9 et 255 caractere", max= 255, maxMessage="Le numéro de téléphone doit faire entre 9 et 255 caractere")
+     * @Groups({"users_read"})
+     */
     private $phone;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Pointage::class)]
+    #[ApiSubresource]
+    /**
+     * @Groups({"users_read"})
+     */
     private $pointages;
 
     public function __construct()
@@ -60,6 +97,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->email = $email;
 
         return $this;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->email;
     }
 
     /**

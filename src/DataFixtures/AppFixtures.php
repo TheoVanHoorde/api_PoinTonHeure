@@ -32,10 +32,18 @@ class AppFixtures extends Fixture
 
             $user = new User();
 
+            if($u == 0 ) {
+                $roles=["patron"];
+            }
+            else{
+                $roles=["ouvrier"];
+            }
+
             $user->setFirstName($faker->firstName)
                 ->setLastName($faker->lastName)
                 ->setEmail($faker->email)
                 ->setPhone($faker->phoneNumber)
+                ->setRoles($roles)
                 ->setPassword($this->encoder->hashPassword($user,"password"));
 
             $manager->persist($user);

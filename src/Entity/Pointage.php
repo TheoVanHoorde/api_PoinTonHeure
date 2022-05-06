@@ -9,41 +9,42 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PointageRepository::class)]
-#[ApiResource()]
+/**
+ * @ApiResource(
+ *     normalizationContext={"groups"={"pointage_read"}}
+ *     )
+ */
 class Pointage
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    #[Groups("pointage_Read")]
+    #[Groups("pointage_read")]
     private $id;
 
     #[ORM\Column(type: 'time')]
-    #[Groups("pointage_Read")]
+    #[Groups("pointage_read")]
     /**
      * @Assert\NotBlank(message="L'heure du début de matinée est obligatoire")
-     *
      */
     private $startHourAm;
 
     #[ORM\Column(type: 'time')]
-    #[Groups("pointage_Read")]
+    #[Groups("pointage_read")]
     /**
      * @Assert\NotBlank(message="L'heure du Fin de matinée est obligatoire")
-     *
      */
     private $endHourAm;
 
     #[ORM\Column(type: 'time')]
-    #[Groups("pointage_Read")]
+    #[Groups("pointage_read")]
     /**
      * @Assert\NotBlank(message="L'heure du début de la pause est obligatoire")
-     *
      */
     private $startHourBreak;
 
     #[ORM\Column(type: 'time')]
-    #[Groups("pointage_Read")]
+    #[Groups("pointage_read")]
     /**
      * @Assert\NotBlank(message="L'heure de fin de la pause est obligatoire")
      *
@@ -51,7 +52,7 @@ class Pointage
     private $endHourBreak;
 
     #[ORM\Column(type: 'time')]
-    #[Groups("pointage_Read")]
+    #[Groups("pointage_read")]
     /**
      * @Assert\NotBlank(message="L'heure du début de l'aprés-midi est obligatoire")
      *
@@ -59,23 +60,21 @@ class Pointage
     private $startHourPm;
 
     #[ORM\Column(type: 'time')]
-    #[Groups("pointage_Read")]
+    #[Groups("pointage_read")]
     /**
      * @Assert\NotBlank(message="L'heure de la fib de journée est obligatoire")
-     *
      */
     private $endHourPm;
 
     #[ORM\Column(type: 'date')]
-    #[Groups("pointage_Read")]
+    #[Groups("pointage_read")]
     /**
      * @Assert\NotBlank(message="La date du jour du pointage et obligatoire")
-     *
      */
     private $date;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups("pointage_Read")]
+    #[Groups("pointage_read")]
     /**
      * @Assert\NotBlank(message="La description de la journée est obligatoire")
      * @Assert\Length(min= 3, minMessage="La description de la journee doit faire entre 3 et 255 caractere", max= 255, maxMessage="La description de la journée doit faire entre 3 et 255 caractère")
@@ -83,7 +82,7 @@ class Pointage
     private $observation;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups("pointage_Read")]
+    #[Groups("pointage_read")]
     /**
      * @Assert\NotBlank(message="le status et obligatoire")
      *
@@ -92,6 +91,7 @@ class Pointage
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'pointages')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups("pointage_read")]
     /**
      * @Assert\NotBlank(message="l'utilisateur est obligatoire")
      *

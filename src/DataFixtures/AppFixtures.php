@@ -33,10 +33,10 @@ class AppFixtures extends Fixture
             $user = new User();
 
             if($u == 0 ) {
-                $roles=["patron"];
+                $roles=["ROLE_PATRON"];
             }
             else{
-                $roles=["ouvrier"];
+                $roles=["ROLE_OUVRIER"];
             }
 
             $user->setFirstName($faker->firstName)

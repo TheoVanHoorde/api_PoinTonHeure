@@ -51,14 +51,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 255)]
     /**
      * @Assert\NotBlank(message="Le nom de famille est obligatoire")
-     * @Groups({"users_read"})
+     * @Groups({"users_read","pointage_read"})
      */
     private $firstName;
 
     #[ORM\Column(type: 'string', length: 255)]
     /**
      * @Assert\NotBlank(message=" Le prénom est obligatoire")
-     * @Groups({"users_read"})
+     * @Groups({"users_read","pointage_read"})
      */
     private $lastName;
 
